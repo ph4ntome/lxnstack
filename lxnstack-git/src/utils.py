@@ -64,7 +64,7 @@ def showMsgBox(text,informative_text="",parent=None,buttons=Qt.QMessageBox.Ok,ic
     msgBox.setInformativeText(str(informative_text))
     msgBox.setStandardButtons(buttons)
     
-    if icon != None:
+    if not (icon is None):
         msgBox.setIcon(icon)
         
     return msgBox.exec_()
@@ -339,7 +339,7 @@ class SplashScreen(Qt.QObject):
         self._qss.finish(qwid)
     
     def processEvents(self):
-        if self._qapp!=None:
+        if not (self._qapp is None):
             self._qapp.processEvents()
             
 class Frame(Qt.QObject):
@@ -367,7 +367,7 @@ class Frame(Qt.QObject):
         self.is_good=False
         self._open_args=args
         
-        if (('progress_bar' in args) and args['progress_bar']!=None):
+        if (('progress_bar' in args) and not (args['progress_bar'] is None)):
             pb = args['progress_bar']
             self.progressValueChanged.connect(pb.setValue)
             self.progressMaximumChanged.connect(pb.setMaximum)
@@ -481,7 +481,7 @@ class Frame(Qt.QObject):
         data = self._open(file_name, page, asarray, asuint8, fit_levels, ftype, PIL_priority, 
                          only_sizes, force_update, **args)
         
-        if data==None:
+        if data is None:
             self.is_good=False
         else:
             self.is_good=True
@@ -753,7 +753,7 @@ class Frame(Qt.QObject):
                  
             if FITS_SUPPORT:
                 fits_header=[]
-                if ctime!=None:
+                if not (ctime is None):
                     gm=time.gmtime(ctime)
                     date = '{0:02d}-{1:02d}-{2:02d}T{3:02d}:{4:02d}:{5:02.0f}'.format(
                         gm.tm_year,gm.tm_mon,gm.tm_mday,gm.tm_hour,gm.tm_min,gm.tm_sec)
@@ -772,7 +772,7 @@ class Frame(Qt.QObject):
                     
                     try:
                         img = cr2file.load()
-                        if img == None:
+                        if img is None:
                             return None
                     except SyntaxError as exc:
                         msgBox = Qt.QMessageBox()
@@ -803,7 +803,7 @@ class Frame(Qt.QObject):
                     except:
                         image=None
                     
-                    if (image==None) or (cr2file.size[0] != self.width) or (cr2file.size[1] != self.height):
+                    if (image is None) or (cr2file.size[0] != self.width) or (cr2file.size[1] != self.height):
                         self.open(file_name, page, asarray, asuint8, fit_levels, ftype, PIL_priority,force_update=True,**args)
             else:
                 if (('convert_cr2' in args) and args['convert_cr2']==True):
@@ -815,7 +815,7 @@ class Frame(Qt.QObject):
                         
                         try:
                             img = cr2file.load()
-                            if img == None:
+                            if img is None:
                                 return None
                         except SyntaxError as exc:
                             msgBox = Qt.QMessageBox()
@@ -911,7 +911,7 @@ class Frame(Qt.QObject):
             except:
                 cv2img=None
                 
-            if (page==0) and (cv2img!=None) and not(PIL_priority):
+            if (page==0) and not(cv2img is None) and not(PIL_priority):
                     
                 img = bgr2rgb(cv2img)
                 
@@ -988,7 +988,7 @@ class Frame(Qt.QObject):
                     return None
                 except Exception as err:
                     if page==0:
-                        if cv2img == None:  # Nor PIL neither CV2 can open the file!
+                        if cv2img is None:  # Nor PIL neither CV2 can open the file!
                             msgBox = Qt.QMessageBox()
                             msgBox.setText(str(err))
                             msgBox.setIcon(Qt.QMessageBox.Critical)
@@ -1015,7 +1015,7 @@ class Frame(Qt.QObject):
                         image = img
     
         if not 'UTCEPOCH' in self.properties:
-            if ctime==None:
+            if ctime is None:
                 self.addProperty('UTCEPOCH',getCreationTime(file_name))
             else:
                 self.addProperty('UTCEPOCH',ctime)
@@ -1084,7 +1084,7 @@ class Frame(Qt.QObject):
 
     def _imwrite_fits_(self, data, rgb_mode=True, override_name=None, force_overwrite=False, compressed=False, header={},outbits=16):
 
-        if override_name!= None:
+        if not(override_name is None):
             name = override_name
         else:
             name = self.url
@@ -1239,7 +1239,7 @@ def bgr2rgb(cv2img):
         
 
 def normToUint8 (data,adapt=False, lrange=None):
-    if data==None:
+    if data is None:
         return None
     else:
         minv,maxv=getMinMax(data,adapt, lrange)
@@ -1257,7 +1257,7 @@ def normToUint8 (data,adapt=False, lrange=None):
         return spec.clip(0,255).astype(np.uint8)
 
 def normToUint16 (data, refit=True):    
-    if data==None:
+    if data is None:
         return None
     elif data.dtype == np.uint16:
         return data
@@ -1286,7 +1286,7 @@ def normToUint16 (data, refit=True):
     
 def getMinMax(data,adapt=False, lrange=None):
     if ((adapt==2) and
-        (lrange!=None) and
+        not (lrange is None) and
         (len(lrange)>=2)):
         maxv=np.max(lrange)*data.max()/100.0
     elif adapt==1 or (data.max() > 65536):
@@ -1300,7 +1300,7 @@ def getMinMax(data,adapt=False, lrange=None):
         maxv=255.0
 
     if ((adapt==2) and
-        (lrange!=None) and
+        not(lrange is None) and
         (len(lrange)>=2)):
         minv=data.min()+np.min(lrange)*(data.max()-data.min())/100.0
     elif adapt==1 or (data.min() < 0):
@@ -1335,7 +1335,7 @@ def getJetColor(data,fit_levels=True, lrange=None):
     
 def arrayToQImage(img,R=0,G=1,B=2,A=3,bw_jet=True,fit_levels=False,levels_range=None):
     
-    if img==None:
+    if img is None:
         return None
     elif type(img) != np.ndarray:
         raise TypeError('In module utils, in function arrayToQImage, ndarray expected as first argumrnt but '+str(type(img))+' given instead')
@@ -1910,7 +1910,7 @@ def drawCurves(painter, data_x, data_y, min_max, color=0,errors=None,
             x=(data_x[i]-minx)*x_scale + x1
             y=(data_y[i]-miny)*y_scale + y1
             drawMarker(painter,x,y,r1,r2,ring,cross,square)
-            if (errors!=None):
+            if not(errors is None):
                 if bar_type==BARS_TYPE[1]:
                     ys=(data_y[i]+errors[i]-miny)*y_scale + y1
                     yl=(data_y[i]-errors[i]-miny)*y_scale + y1
@@ -2112,7 +2112,7 @@ def getDefocusCircleRadius2(img):
             difference = ((x-cx)**2+(y-cy)**2)**0.5
 
             if difference <= tollerance:
-                if best == None:
+                if best is None:
                     best = difference
                     best_radius = r
                 elif difference <= best:
@@ -2474,9 +2474,9 @@ def drawHistograhm(painter, hists, xmin=None, xmax=None,logY=False):
     else:
         ymax=max(ymax,max(2,max(hists[0][0])))
     
-    if xmax==None:
+    if xmax is None:
         xmax=max(hists[0][1])
-    if xmin==None:
+    if xmin is None:
         xmin=min(hists[0][1])
     
     num_of_components=len(hists)

@@ -771,7 +771,7 @@ class theApp(Qt.QObject):
         
         self.trace("adding component "+str(name)) 
         
-        if index==None:
+        if index is None:
             index=len(self.component_table)
             
         self.component_table[index]=name
@@ -990,7 +990,7 @@ class theApp(Qt.QObject):
         
         self.component_ctrl_table={}
         
-        if self.levels_dlg.MWBScrollArea.layout() != None:
+        if not (self.levels_dlg.MWBScrollArea.layout() is None):
             Qt.QWidget().setLayout(self.levels_dlg.MWBScrollArea.layout())
     
     def rebuildMWBControls(self):
@@ -1172,14 +1172,14 @@ class theApp(Qt.QObject):
                
         self.fit_levels=state
         
-        if self.current_image != None:
+        if not (self.current_image is None):
             self.showImage(utils.arrayToQImage(self.current_image._original_data,
                                             bw_jet=self.use_colormap_jet,
                                             fit_levels=self.fit_levels,
                                             levels_range=self.levels_range))        
             self.setLevelsRange(self.levels_range)
             
-        if (self.ref_image != None) and self.manual_align:
+        if not (self.ref_image is None) and self.manual_align:
             self.ref_image = utils.arrayToQImage(self.ref_image._original_data,
                                                  bw_jet=self.use_colormap_jet,
                                                  fit_levels=self.fit_levels,
@@ -1255,7 +1255,7 @@ class theApp(Qt.QObject):
         else:
             self.use_colormap_jet=True
         
-        if self.current_image != None:
+        if not(self.current_image is None):
             self.current_image = utils.arrayToQImage(self.current_image._original_data,
                                                      bw_jet=self.use_colormap_jet,
                                                      fit_levels=self.fit_levels,
@@ -1527,16 +1527,16 @@ class theApp(Qt.QObject):
             slider.setEnabled(True)
             spin.setEnabled(True)
         keys=self.device_propetyes[key]
-        if keys['min']!=None:
+        if not(keys['min'] is None):
             slider.setMinimum(int(keys['min']))
             spin.setMinimum(int(keys['min']))
-        if keys['max']!=None:
+        if not(keys['max'] is None):
             slider.setMaximum(int(keys['max']))
             spin.setMaximum(int(keys['max']))
-        if keys['value']!=None:
+        if not(keys['value'] is None):
             slider.setValue(int(keys['value']))
             spin.setValue(int(keys['value']))
-        elif keys['default']!=None:
+        elif not(keys['default'] is None):
             slider.setValue(int(keys['default']))
             spin.setValue(int(keys['default']))             
 
@@ -1627,9 +1627,9 @@ class theApp(Qt.QObject):
             self.wasCanceled=False
             return
 
-        if origin == None:
+        if origin is None:
             if ((self.current_cap_device_idx == -1) or
-                (self.save_image_dir==None)):
+                (self.save_image_dir is None)):
                 current_tab_idx=self.dlg.tabWidget.currentIndex()
                 self.dlg.tabWidget.setCurrentIndex(2)
                 if not self.setPreferences():
@@ -1683,7 +1683,7 @@ class theApp(Qt.QObject):
                 self.listItemChanged(0)
 
         else:
-            if origin == None:
+            if origin is None:
                 utils.showErrorMsgBox(tr("Cannot open current capture device!"))
             else:
                 utils.showErrorMsgBox(tr("Cannot open this video file."))            
@@ -2115,8 +2115,8 @@ class theApp(Qt.QObject):
         x=Int(mx/self.actual_zoom)
         y=Int(my/self.actual_zoom)
 
-        if (self.current_image != None) and (not self.manual_align):
-            if self.current_image._original_data != None:
+        if not (self.current_image is None) and (not self.manual_align):
+            if not (self.current_image._original_data is None):
                 imshape = self.current_image._original_data.shape
                 if ((y>=0) and (y < imshape[0]) and
                     (x>=0) and (x < imshape[1])):
@@ -2221,11 +2221,11 @@ class theApp(Qt.QObject):
     def colorBarPaintEvent(self, obj):
         val=self.wnd.colorBar.__paintEvent__(obj)
 
-        if self.current_image==None:
+        if self.current_image is None:
             self.wnd.colorBar.setPixmap(Qt.QPixmap())
             return val
         
-        if self.wnd.colorBar.current_val!=None:
+        if not(self.wnd.colorBar.current_val is None):
             painter = Qt.QPainter(self.wnd.colorBar)
             cb = self.wnd.colorBar
             
@@ -2359,7 +2359,7 @@ class theApp(Qt.QObject):
             there_is_at_least_one_chart=False
             for i in range(listWidget.count()):
                 q = listWidget.item(i)
-                if q==None:
+                if q is None:
                     continue
                 if q.checkState()==2:
                     there_is_at_least_one_chart=True
@@ -2374,12 +2374,12 @@ class theApp(Qt.QObject):
                     if len(data_y.shape)>1:
                         data_y=data_y[:,q.listindex[2]]
                 
-                    if ymin==None:
+                    if ymin is None:
                         ymin=data_y.min()-emax
                     else:
                         ymin=min(ymin,data_y.min()-emax)
                 
-                    if ymax==None:
+                    if ymax is None:
                         ymax=data_y.max()+emax
                     else:
                         ymax=max(ymax,data_y.max()+emax)
@@ -2396,7 +2396,7 @@ class theApp(Qt.QObject):
             
             for i in range(listWidget.count()):
                 q = listWidget.item(i)
-                if q==None:
+                if q is None:
                     continue
                 if q.checkState()==2:
                     data_y=np.array(self.lightcurve[q.listindex[0]][q.listindex[1]]['data'])
@@ -2453,7 +2453,7 @@ class theApp(Qt.QObject):
     def setCurrentCurveColor(self, idx, listWidget, surface):
         q = listWidget.currentItem()
         
-        if q==None:
+        if q is None:
             return
         
         q.chart_properties['color']=self.getChartColor(idx)
@@ -2469,7 +2469,7 @@ class theApp(Qt.QObject):
     def setCurrentCurveLineType(self, idx, listWidget, surface):
         q = listWidget.currentItem()
 
-        if q==None:
+        if q is None:
             return
         
         try:
@@ -2490,7 +2490,7 @@ class theApp(Qt.QObject):
     def setCurrentCurvePointsType(self, idx, listWidget, surface):
         q = listWidget.currentItem()
 
-        if q==None:
+        if q is None:
             return
         try:
             pointstype=utils.POINTS_TYPE[idx]
@@ -2509,7 +2509,7 @@ class theApp(Qt.QObject):
     def setCurrentCurveBarsType(self, idx, listWidget, surface):
         q = listWidget.currentItem()
         
-        if q==None:
+        if q is None:
             return
         
         try:
@@ -2530,7 +2530,7 @@ class theApp(Qt.QObject):
     def setCurrentCurveSmooting(self, val, listWidget, surface):
         q = listWidget.currentItem()
         
-        if q==None:
+        if q is None:
             return
         
         q.chart_properties['smoothing']=val
@@ -2545,7 +2545,7 @@ class theApp(Qt.QObject):
     def setCurrentPointSize(self, val, listWidget, surface):
         q = listWidget.currentItem()
         
-        if q==None:
+        if q is None:
             return
         
         q.chart_properties['point_size']=val
@@ -2560,7 +2560,7 @@ class theApp(Qt.QObject):
     def setCurrentLineWidth(self, val, listWidget, surface):
         q = listWidget.currentItem()
         
-        if q==None:
+        if q is None:
             return
         
         q.chart_properties['line_width']=val
@@ -2574,8 +2574,8 @@ class theApp(Qt.QObject):
         x=Int(mx/self.actual_zoom)
         y=Int(my/self.actual_zoom)
 
-        if (self.current_image != None) and (not self.manual_align):
-            if self.current_image._original_data != None:
+        if not (self.current_image is None) and (not self.manual_align):
+            if not (self.current_image._original_data is None):
                 imshape = self.current_image._original_data.shape
                 if ((y>=0) and (y < imshape[0]) and
                     (x>=0) and (x < imshape[1])):
@@ -2617,7 +2617,7 @@ class theApp(Qt.QObject):
     def previewLabelPaintEvent(self, obj):
         val=self.levels_dlg.previewLabel.__paintEvent__(obj)
         
-        if self._preview_data!=None:
+        if not (self._preview_data is None):
             w=float(self.levels_dlg.previewLabel.width())
             h=float(self.levels_dlg.previewLabel.height())
             ww=float(self._preview_image.width())
@@ -2646,7 +2646,7 @@ class theApp(Qt.QObject):
         
         painter = Qt.QPainter(self.imageLabel)
         
-        if self.current_image != None:
+        if not (self.current_image is None):
             painter.scale(self.actual_zoom,self.actual_zoom)
             painter.drawImage(0,0,self.current_image)
         
@@ -2721,7 +2721,7 @@ class theApp(Qt.QObject):
         painter.setPen(QtCore.Qt.white)
 
 
-        if self._phase_align_data!=None:
+        if not (self._phase_align_data is None):
             
             cx = self._phase_align_data[2][1]/2.0
             cy = self._phase_align_data[2][0]/2.0
@@ -2765,7 +2765,7 @@ class theApp(Qt.QObject):
             painter.drawRect(rect)
             
     def _drawDifference(self,painter):
-        if (self.ref_image != None) and (self.current_image != None):
+        if not (self.ref_image is None) and not (self.current_image is None):
             
             ref = self.framelist[self.ref_image_idx]
             img = self.framelist[self.dif_image_idx] 
@@ -2862,7 +2862,7 @@ class theApp(Qt.QObject):
         self.viewVScrollBar.setValue(viewPoint[1]*self.viewVScrollBar.maximum())
         
     def updateResultImage(self):
-        if self._stk!=None:
+        if not (self._stk is None):
             img = utils.arrayToQImage(self._stk,bw_jet=self.use_colormap_jet,fit_levels=self.fit_levels,levels_range=self.levels_range)
             self.showImage(img)
         else:
@@ -2900,9 +2900,9 @@ class theApp(Qt.QObject):
 
     def updateImage(self, paint=True, overrided_image=None):
         
-        if overrided_image != None:
+        if not (overrided_image is None):
             current_image=overrided_image
-        elif self.current_image != None:
+        elif not(self.current_image is None):
             current_image=self.current_image
         else:
             return False
@@ -2935,7 +2935,7 @@ class theApp(Qt.QObject):
             self.imageLabel.setMinimumSize(imw*self.actual_zoom,imh*self.actual_zoom)
             self.imageLabel.resize(imw*self.actual_zoom,imh*self.actual_zoom)
             self.imageLabel.update()
-            if current_image._original_data != None:
+            if not(current_image._original_data is None):
                 self.wnd.colorBar.max_val=current_image._original_data.max()
                 self.wnd.colorBar.min_val=current_image._original_data.min()
 
@@ -3019,7 +3019,7 @@ class theApp(Qt.QObject):
 
         oldlist=self.framelist[:]
 
-        if newlist==None:
+        if newlist is None:
             open_str=tr("All supported images")+self.images_extensions+";;"+tr("All files *.* (*.*)")
             newlist=list(Qt.QFileDialog.getOpenFileNames(self.wnd,
                                                          tr("Select one or more files"),
@@ -3362,7 +3362,7 @@ class theApp(Qt.QObject):
             return False
 
     def debayerize(self, data):
-        if (data!=None) and (len(data.shape)==2) and self.isBayerUsed():
+        if not(data is None) and (len(data.shape)==2) and self.isBayerUsed():
             
             bayer = self.wnd.bayerComboBox.currentIndex()
             
@@ -3583,7 +3583,7 @@ class theApp(Qt.QObject):
         self.qapp.restoreOverrideCursor()
 
     def currentManualAlignListItemChanged(self, cur_item):
-        if cur_item == None:
+        if cur_item is None:
             return False
         elif cur_item.checkState()==2:
             if self.__operating!=True:
@@ -4077,7 +4077,7 @@ class theApp(Qt.QObject):
     def corruptedMsgBox(self,info=None):
             msgBox = Qt.QMessageBox(self.wnd)
             msgBox.setText(tr("The project is invalid or corrupted!"))
-            if info!=None:
+            if not(info is None):
                 msgBox.setInformativeText(str(info))
             msgBox.setIcon(Qt.QMessageBox.Critical)
             msgBox.exec_()
@@ -4699,14 +4699,14 @@ class theApp(Qt.QObject):
             max_iteration=25
             while (len(points) < ((self.max_points/2)+1)) and (max_iteration>0):
                 points = cv2.goodFeaturesToTrack(g,self.max_points,self.min_quality,min_dist)
-                if points==None:
+                if points is None:
                     points=[]
                 self.min_quality*=0.75
                 max_iteration-=1
 
         else:
             points = cv2.goodFeaturesToTrack(g,self.max_points,self.min_quality,min_dist)
-            if points==None:
+            if points is None:
                 points=[]
             
         if len(points) > 0:            
@@ -4820,7 +4820,7 @@ class theApp(Qt.QObject):
         
         result=None
         
-        if (do_reset!=None) or (do_align!=None) or (do_derot!=None):
+        if not(do_reset is None) or not(do_align is None) or not(do_derot is None):
             align=(do_align==True)
             derotate=(do_derot==True)
             reset=(do_reset==True)
@@ -5081,7 +5081,7 @@ class theApp(Qt.QObject):
             
             if img.isUsed():
                 self.qapp.processEvents()
-                if ref == None:
+                if ref is None:
                     ref = img
                     self.trace('\n using image '+img.name+' as reference')
                     ref_data = ref.getData(asarray=True)
@@ -5100,7 +5100,7 @@ class theApp(Qt.QObject):
                     self.statusBar.showMessage(tr('shift: ')+str(data[1])+', '+
                                                tr('rotation: ')+str(data[2]))
                     del img_data
-                    if (data[0]!=None) and (self.checked_show_phase_img==2):
+                    if not(data[0] is None) and (self.checked_show_phase_img==2):
                         self.showImage(utils.arrayToQImage(data[0]))
                     img.setOffset(data[1])
                     img.setAngle(data[2])
@@ -5187,7 +5187,7 @@ class theApp(Qt.QObject):
         else:
             self.stack_dlg.tabWidget.setTabEnabled(3,True)
         
-        if method!=None:
+        if not(method is None):
             bias_method=method
             dark_method=method
             flat_method=method
@@ -5263,7 +5263,7 @@ class theApp(Qt.QObject):
         elif (len(self.biasframelist)>0):
             self.statusBar.showMessage(tr('Creating master-dark, please wait...'))
             _bas=self.getStackingMethod(bias_method,self.biasframelist, None, None, None, **bias_args)
-            if _bas==None:
+            if _bas is None:
                 return False
             else:
                 self._bas=_bas
@@ -5284,7 +5284,7 @@ class theApp(Qt.QObject):
         elif (len(self.darkframelist)>0):
             self.statusBar.showMessage(tr('Creating master-dark, please wait...'))
             _drk=self.getStackingMethod(dark_method,self.darkframelist, None, None, None, **dark_args)
-            if _drk==None:
+            if _drk is None:
                 return False
             else:
                 self._drk=_drk
@@ -5305,7 +5305,7 @@ class theApp(Qt.QObject):
         elif (len(self.flatframelist)>0):
             self.statusBar.showMessage(tr('Creating master-flat, please wait...'))
             _flt=self.getStackingMethod(flat_method,self.flatframelist, None, None, None,**flat_args)
-            if _flt==None:
+            if _flt is None:
                 return False
             else:
                 self._flt=_flt
@@ -5314,7 +5314,7 @@ class theApp(Qt.QObject):
         
         _stk=self.getStackingMethod(lght_method,self.framelist, self._bas, self._drk, self._flt,**lght_args)
         
-        if(_stk == None):
+        if(_stk is None):
             self.unlock()
             return False
         else:
@@ -5335,16 +5335,16 @@ class theApp(Qt.QObject):
     def generateMasters(self, bias_image=None, dark_image=None, flat_image=None):
         self.trace("generating master frames")
         
-        if (bias_image != None):
+        if not (bias_image is None):
             
             master_bias=(bias_image*self.master_bias_mul_factor)
             
         else:
             master_bias=None
             
-        if (dark_image != None):
+        if not (dark_image is None):
             
-            if (master_bias != None):
+            if not (master_bias is None):
                 master_dark=(dark_image-master_bias)*self.master_dark_mul_factor
             else:
                 master_dark=dark_image*self.master_dark_mul_factor
@@ -5376,7 +5376,7 @@ class theApp(Qt.QObject):
             master_dark=None
             hot_pixels=None
             
-        if (flat_image != None):
+        if not (flat_image is None):
             
             # this should avoid division by zero
             zero_mask = ((flat_image == 0).astype(self.ftype))*flat_image.max()
@@ -5393,19 +5393,19 @@ class theApp(Qt.QObject):
     
     def calibrate(self, image, master_bias=None, master_dark=None, master_flat=None, hot_pixels=None, debayerize_result=False, **args):
                 
-        if (master_bias == None) and (master_dark == None) and (master_flat == None):
+        if (master_bias is None) and (master_dark is None) and (master_flat is None):
             self.trace("skipping image calibration")
         else:
             self.trace("calibrating image...")
-            if master_bias!=None:
+            if not(master_bias is None):
                 self.trace("calibrating image: subtracting bias")
                 image -=  master_bias
                                     
-            if master_dark!=None:
+            if not(master_dark is None):
                 self.trace("calibrating image: subtracting master dark")
                 image -=  master_dark
             
-            if hot_pixels!=None:
+            if not(hot_pixels is None):
                 self.trace("calibrating image: correcting for hot pixels")
                 
             
@@ -5450,7 +5450,7 @@ class theApp(Qt.QObject):
                     image[hotp_y,hotp_x]=utils.getNeighboursAverage(image,hotp_x,hotp_y,self.wnd.rawGroupBox.isChecked()==2)
                 #self.traceTimeStop()    
                 
-            if master_flat!=None:
+            if not(master_flat is None):
                 self.trace("calibrating image: dividing by master flat")
                 image /= master_flat  
                 
@@ -5585,7 +5585,7 @@ class theApp(Qt.QObject):
         self.progress.setValue(4*(total-1))  
         self.statusBar.showMessage(tr('Computing final image...'))
         
-        if post_operation != None:
+        if not (post_operation is None):
             result=post_operation(result,count)
             
         
@@ -5821,7 +5821,7 @@ class theApp(Qt.QObject):
                 
             r = self.calibrate(r, master_bias, master_dark, master_flat, hot_pixels, **args)
             
-            if original_shape == None:
+            if original_shape is None:
                 original_shape = r.shape
             
             if self.progressWasCanceled():
@@ -5889,7 +5889,7 @@ class theApp(Qt.QObject):
         
         if (show1 or show2 or show3):
             self.stack_dlg.tabWidget.setTabEnabled(0,False)
-            if method!=None:
+            if not(method is None):
                 bias_method=method
                 dark_method=method
                 flat_method=method
@@ -5978,7 +5978,7 @@ class theApp(Qt.QObject):
         elif (len(self.biasframelist)>0):
             self.statusBar.showMessage(tr('Creating master-dark, please wait...'))
             _bas=self.getStackingMethod(bias_method,self.biasframelist, None, None, None, **dark_args)
-            if _das==None:
+            if _das is None:
                 return False
             else:
                 self._bas=_bas
@@ -5997,7 +5997,7 @@ class theApp(Qt.QObject):
         elif (len(self.darkframelist)>0):
             self.statusBar.showMessage(tr('Creating master-dark, please wait...'))
             _drk=self.getStackingMethod(dark_method,self.darkframelist, None, None, None, **dark_args)
-            if _drk==None:
+            if _drk is None:
                 return False
             else:
                 self._drk=_drk
@@ -6017,7 +6017,7 @@ class theApp(Qt.QObject):
         elif (len(self.flatframelist)>0):
             self.statusBar.showMessage(tr('Creating master-flat, please wait...'))
             _flt=self.getStackingMethod(flat_method,self.flatframelist, None, self._drk, None,**flat_args)
-            if _flt==None:
+            if _flt is None:
                 return False
             else:
                 self._flt=_flt
@@ -6365,7 +6365,7 @@ class theApp(Qt.QObject):
 
         self.rebuildMWBControls()
                 
-        if self._old_stk == None:
+        if self._old_stk is None:
             self._oldhst=self._hst.copy()
             self._old_stk=self._stk.copy()
             self.resetLevels()
@@ -6744,21 +6744,21 @@ class theApp(Qt.QObject):
             utils.showWarningMsgBox(tr("Cannot save compressed files with this version of pyfits")+":\n "+ tr("the image was saved as an uncompressed FITS file."))
             
         if self.save_dlg.saveMastersCheckBox.checkState()==2:
-            if (self._bas!=None):
+            if not(self._bas is None):
                 bas_name=os.path.join(destdir,name+"-master-bias")
                 frm = utils.Frame(bas_name)
                 try:
                     frm._imwrite_fits_(self._bas,rgb_mode,compressed=fits_compressed,outbits=bits)
                 except:
                     frm._imwrite_fits_(self._bas,rgb_mode,compressed=False,outbits=bits)
-            if (self._drk!=None):
+            if not(self._drk is None):
                 drk_name=os.path.join(destdir,name+"-master-dark")
                 frm = utils.Frame(drk_name)
                 try:
                     frm._imwrite_fits_(self._drk,rgb_mode,compressed=fits_compressed,outbits=bits)
                 except:
                     frm._imwrite_fits_(self._drk,rgb_mode,compressed=False,outbits=bits)
-            if (self._flt!=None):
+            if not(self._flt is None):
                 flt_name=os.path.join(destdir,name+"-master-flat")
                 frm = utils.Frame(flt_name)
                 try:
@@ -6780,15 +6780,15 @@ class theApp(Qt.QObject):
         np.save(avg_name,self._stk.astype(outbits))
         
         if self.save_dlg.saveMastersCheckBox.checkState()==2:
-            if (self._bas!=None):
+            if not(self._bas is None):
                 bas_name=os.path.join(destdir,name+"-master-bias")
                 np.save(bas_name,self._bas.astype(outbits))
                 
-            if (self._drk!=None):
+            if not(self._drk is None):
                 drk_name=os.path.join(destdir,name+"-master-dark")
                 np.save(drk_name,self._drk.astype(outbits))
             
-            if (self._flt!=None):
+            if not(self._flt is None):
                 flt_name=os.path.join(destdir,name+"-master-flat")
                 np.save(flt_name,self._flt.astype(outbits))
     
@@ -6825,17 +6825,17 @@ class theApp(Qt.QObject):
         
         
         if self.save_dlg.saveMastersCheckBox.checkState()==2:
-            if (self._bas!=None):
+            if not(self._bas is None):
                 bas_name=os.path.join(destdir,name+"-master-bias."+frmt)
                 frm = utils.Frame(bas_name)
                 frm._imwrite_cv2_(rawbas,flags)
                 
-            if (self._drk!=None):
+            if not(self._drk is None):
                 drk_name=os.path.join(destdir,name+"-master-dark."+frmt)
                 frm = utils.Frame(drk_name)
                 frm._imwrite_cv2_(rawdrk,flags)
             
-            if (self._flt!=None):
+            if not(self._flt is None):
                 flt_name=os.path.join(destdir,name+"-master-flat."+frmt)
                 frm = utils.Frame(flt_name)
                 frm._imwrite_cv2_(rawflt,flags)
