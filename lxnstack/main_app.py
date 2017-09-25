@@ -3729,7 +3729,7 @@ class theApp(Qt.QObject):
         y2 = point.y+r_h
 
         rawi = self.framelist[image_idx].getData(asarray=True)
-        refi = rawi[y1:y2, x1:x2]
+        refi = rawi[int(round(y1)):int(round(y2)), int(round(x1)):int(round(x2))]
         del rawi
 
         cv_ref = refi.astype(np.float32)
