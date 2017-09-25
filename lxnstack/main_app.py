@@ -3758,7 +3758,7 @@ class theApp(Qt.QObject):
             if self.aap_wholeimage == 2:
                 rawi = frm.getData(asarray=True)
             else:
-                rawi = frm.getData(asarray=True)[y1-r_h:y2+r_h, x1-r_w:x2+r_w]
+                rawi = frm.getData(asarray=True)[int(round(y1-r_h)):int(round(y2+r_h)), int(round(x1-r_w)):int(round(x2+r_w))]
 
             cv_im = rawi.astype(np.float32)
 
